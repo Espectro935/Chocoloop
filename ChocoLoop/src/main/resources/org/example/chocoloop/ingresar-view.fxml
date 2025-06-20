@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #99a3a4;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.chocoloop.IngresarController">
+    <children>
+        <Button layoutX="527.0" layoutY="361.0" mnemonicParsing="false" onAction="#guardar" text="GUARDAR" />
+        <Button layoutX="436.0" layoutY="361.0" mnemonicParsing="false" onAction="#volverMid" text="CANCELAR" />
+        <Label layoutX="14.0" layoutY="14.0" text="NO. CASA" />
+        <Spinner fx:id="SPCasa" layoutX="79.0" layoutY="10.0" max="600" min="0" prefHeight="25.0" prefWidth="71.0" />
+        <Label layoutX="187.0" layoutY="14.0" text="LETRA" />
+        <TextField fx:id="TFLetra" layoutX="226.0" layoutY="10.0" onKeyTyped="#asignarCluster" prefHeight="25.0" prefWidth="44.0" />
+        <Label layoutX="300.0" layoutY="14.0" text="CLUSTER" />
+        <TextField fx:id="TFCluster" disable="true" layoutX="361.0" layoutY="10.0" prefWidth="150.0" />
+        <Label layoutX="14.0" layoutY="365.0" text="TOTAL " />
+        <Label fx:id="lblTotal" layoutX="65.0" layoutY="365.0" text="\$0.00" />
+        <Button layoutX="347.0" layoutY="361.0" mnemonicParsing="false" onAction="#calcular" text="CALCULAR" />
+        <Pane layoutY="47.0" prefHeight="291.0" prefWidth="600.0" style="-fx-border-color: black; -fx-background-color: #95a5a6;">
+            <children>
+                <Label layoutX="25.0" layoutY="53.0" text="CHOCOBANANO" />
+                <Spinner fx:id="SPChocobanano" layoutX="467.0" layoutY="47.0" max="600" min="0" prefHeight="25.0" prefWidth="82.0" />
+                <Label layoutX="25.0" layoutY="89.0" text="CHOCOLATE " />
+                <Spinner fx:id="SPChocolate" layoutX="467.0" layoutY="84.0" max="600" min="0" prefHeight="25.0" prefWidth="82.0" />
+                <Label layoutX="25.0" layoutY="125.0" text="BEBIDA" />
+                <ChoiceBox fx:id="CBBebida" layoutX="77.0" layoutY="121.0" prefWidth="150.0" />
+                <Spinner fx:id="SPBebida" layoutX="467.0" layoutY="124.0" max="600" min="0" prefHeight="25.0" prefWidth="82.0" />
+                <Label layoutX="127.0" layoutY="14.0" text="PRODUCTO" />
+                <Label layoutX="470.0" layoutY="14.0" text="CANTIDAD" />
+            </children>
+        </Pane>
+    </children>
+</Pane>
