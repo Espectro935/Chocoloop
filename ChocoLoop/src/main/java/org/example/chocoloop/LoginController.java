@@ -80,7 +80,7 @@ public class LoginController implements Initializable  {
 
         Stage stage = new Stage(); // Crea un nuevo Stage
         stage.setTitle("Sistema");
-        stage.setScene(new Scene(root, 600, 400));
+        stage.setScene(new Scene(root, 862, 449));
         stage.show();
     }
 

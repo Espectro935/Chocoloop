@@ -36,6 +36,9 @@ public class IngresarController implements Initializable {
     //--------------------------LABEL-----------------------------//
     @FXML
     private Label lblTotal;
+    //---------------------------BUTTON--------------------------//
+    @FXML
+    private Button btnSave;
 
     //--------------------------DECLARACIONES-------------------------//
     private String casa_letra;
@@ -84,13 +87,18 @@ public class IngresarController implements Initializable {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-
             for (String item : cluster) {
                 String[] partes = item.split("--");
+
                 if (Objects.equals(letraFinal, partes[0])) {
                     TFCluster.setText(partes[1]);
+                    System.out.println(Objects.equals(letraFinal, "y"));
+                    if(Objects.equals(letraFinal, "y")){
+                        SPCasa.getValueFactory().setValue(450);
+                        System.out.println(SPCasa.getValue());
+                    }
                     break;
-                } else {
+                }else {
                     TFCluster.setText(null);
                 }
             }
@@ -118,6 +126,7 @@ public class IngresarController implements Initializable {
 
         i.setTotal(total);
         lblTotal.setText("$" + total);
+        btnSave.setDisable(false);
     }
 
     @FXML
@@ -134,6 +143,21 @@ public class IngresarController implements Initializable {
     }
 
     @FXML
+    protected void reiniciarValores() {
+        SPCasa.getValueFactory().setValue(0);
+        SPBebida.getValueFactory().setValue(0);
+        SPChocolate.getValueFactory().setValue(0);
+        SPChocobanano.getValueFactory().setValue(0);
+
+        btnSave.setDisable(true);
+
+        TFLetra.clear();
+        TFCluster.clear();
+
+        CBBebida.setValue("");
+    }
+
+    @FXML
     protected void guardar() throws Exception {
         saveCasa();
         saveIngreso();
@@ -142,41 +166,46 @@ public class IngresarController implements Initializable {
     //------------------------BASE DE DATOS-------------------------//
 
     protected void saveCasa() throws Exception {
-        int numCasa = SPCasa.getValue(), id_cluster = 0;
+        int numCasa = SPCasa.getValue(), id_clusterLocal = 0;
         String letraCasa = getCasa_letra(), clusterCasa = TFCluster.getText();
         Casa c = new Casa(numCasa, letraCasa, clusterCasa);
         String cluster = c.getCasaLetra() + "--" + c.getCasaCluster();
 
-        List<String> casaList = getCasa(0); //Guardar casa
-        List<String> clusterList = getCluster(1);
+        List<String> casaList = getCasa(0); // casas guardadas
+        List<String> clusterList = getCluster(1); // clusters existentes
 
-        if (casaList.isEmpty()) {
-            for (String item : clusterList) {
-                String[] partes = item.split("--");
-                String parteCluster = partes[1] + "--" + partes[2];
-                if (parteCluster.equals(cluster)) {
-                    id_cluster = Integer.parseInt(partes[0]);
-                    break;
+        for (String item : clusterList) {
+            String[] partes = item.split("--");
+            String parteCluster = partes[1] + "--" + partes[2];
+
+            if (parteCluster.equals(cluster)) {
+                id_clusterLocal = Integer.parseInt(partes[0]);
+
+                // Verificar si ya existe esa casa con ese cluster
+                boolean Existe = false;
+                for (String item2 : casaList) {
+                    String[] partes2 = item2.split("--");
+                    int numExistente = Integer.parseInt(partes2[1]);
+                    int idClusterExistente = Integer.parseInt(partes2[2]);
+
+                    if (numExistente == numCasa && idClusterExistente == id_clusterLocal) {
+                        Existe = true;
+                        break;
+                    }
                 }
-            }
-            saveCasa(c.getCasaNum(), id_cluster);
-        } else {
-            for (String item : casaList) {
-                String[] partes = item.split("--");
-                if (!partes[1].equals(String.valueOf(numCasa)) &&
-                        !partes[2].equals(String.valueOf(id_cluster))) {
-                    System.out.println("Son datos nuevos");
-                    saveCasa(c.getCasaNum(), id_cluster);
-                } /*else {
-                    System.err.println("Son datos ya ingresados");
-                }*/
+
+                if (!Existe) {
+                    saveCasa(c.getCasaNum(), id_clusterLocal);
+                }
+                break;
             }
         }
-        //System.out.println(getBebidaName(CBBebida.getValue()));
     }
+
 
     protected void saveCasa(int numero, int cluster) throws Exception {
         Connection con = conexion.getConnection();
+        System.out.println(numero + "--" + cluster);
         String query = "insert into casa (casa_numero, id_cluster) values (?,?)";
         PreparedStatement stmt = con.prepareStatement(query);
         stmt.setInt(1, numero);
@@ -187,31 +216,44 @@ public class IngresarController implements Initializable {
 
     protected void saveIngreso() throws Exception {
         String letra = getCasa_letra(), cluster = TFCluster.getText();
+        int casaNum = SPCasa.getValue();
         int id_bebida = getBebidaName(CBBebida.getValue()),
-                chocobananoCant = SPChocobanano.getValue(), chocolateCant = SPChocolate.getValue(), bebidaCant = SPBebida.getValue();
+                chocobananoCant = SPChocobanano.getValue(),
+                chocolateCant = SPChocolate.getValue(),
+                bebidaCant = SPBebida.getValue();
 
         double chocobananoTotal = chocobananoPrecio * chocobananoCant,
                 chocolateTotal = chocolatePrecio * chocolateCant,
-                bebidaTotal = getBebidaPrecio(), total = i.getTotal();
+                bebidaTotal = getBebidaPrecio(),
+                total = i.getTotal();
 
         String fecha = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        List<String> casaList = getCasa(1); //Guardar ingreso
+        List<String> casaList = getCasa(1); // Obtener lista de casas
+
+        boolean ingresoGuardado = false;
 
         for (String item : casaList) {
             String[] partes = item.split("--");
-            int id_casa = Integer.parseInt(partes[0]);
+            int id_casa = Integer.parseInt(partes[0]), casa_num = Integer.parseInt(partes[1]);
             String parteLetra = partes[2], parteCluster = partes[3];
-            System.out.println(parteLetra + letra +"||"+ parteCluster + cluster);
-            if (Objects.equals(parteLetra, letra) && Objects.equals(parteCluster, cluster)) {
-                System.out.println("entre");
+
+            if (Objects.equals(parteLetra, letra) && Objects.equals(parteCluster, cluster)
+                && Objects.equals(casa_num, casaNum)) {
+                System.out.println(id_casa+ "||"+ casa_num + "||" +parteLetra + "||" + parteCluster);
                 i = new Ingreso(id_casa, id_bebida, chocobananoCant, chocolateCant, bebidaCant,
                         chocobananoTotal, chocolateTotal, bebidaTotal, total, fecha);
                 i.saveIngreso();
-            }else{
-                System.err.println("algo fallo...");
+                System.out.println("Se guardo con exito");
+                ingresoGuardado = true;
+                break; // Salir después de guardar
             }
         }
+
+        if (!ingresoGuardado) {
+            System.err.println("No se encontró la casa para guardar el ingreso.");
+        }
     }
+
 
     protected List<String> getBebidaNombre() throws Exception {
         List<String> bebida = new ArrayList<>();
@@ -243,7 +285,7 @@ public class IngresarController implements Initializable {
 
     protected int getBebidaName(String name) throws Exception {
         int id = 0;
-        if(name != null){
+        if (name != null) {
             Connection con = conexion.getConnection();
             String query = "select id from bebida where bebida = ?";
             PreparedStatement psmt = con.prepareStatement(query);
@@ -252,7 +294,7 @@ public class IngresarController implements Initializable {
             while (rs.next()) {
                 id = rs.getInt("id");
             }
-        }else{
+        } else {
             id = 1;
         }
 
@@ -296,7 +338,7 @@ public class IngresarController implements Initializable {
                         rs.getInt("id_cluster");
                 casa.add(item);
             }
-        }else if (i == 1){
+        } else if (i == 1) {
             rs = con.createStatement().executeQuery(query2);
             while (rs.next()) {
                 String item = rs.getInt("id") + "--" +

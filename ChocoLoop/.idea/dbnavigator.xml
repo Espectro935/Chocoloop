@@ -54,6 +54,9 @@ create table cluster(
 --insert into cluster(letra, cluster) values ('Q','Avellanas');
 --insert into cluster(letra, cluster) values ('R','Camelias');
 --insert into cluster(letra, cluster) values ('S','Cipreses');
+--insert into cluster(letra, cluster) values ('Y', 'Pedidos Ya');
+insert into cluster (letra, cluster) values ('ji', 'Jacarandas 2');
+delete from cluster where letra = 'jj';
 
 --insert into bebida(bebida, precio) values ('', 0);
 --insert into bebida(bebida, precio) values ('Coca Cola 2.5', 2.5);
@@ -62,10 +65,12 @@ create table cluster(
 --insert into bebida(bebida, precio) values ('KolaShampan 3', 2.25);
 --insert into bebida(bebida, precio) values ('Tropical uva 2.5', 2.5);
 
+insert into casa (casa_numero, id_cluster) values (11, 1);
+
 show tables;
-drop table ingreso;
-drop table bebida;
+
 drop table casa;
+drop table ingreso;
 
 create table casa(
 	id int primary key auto_increment,
@@ -74,13 +79,25 @@ create table casa(
     foreign key (id_cluster) references cluster(id)
 );
 
+select * from cluster;
+
+insert into casa(casa_numero, id_cluster) values(68, 24);
+insert into casa(casa_numero, id_cluster) values(13, 1);
+insert into casa(casa_numero, id_cluster) values(121, 2);
+insert into casa(casa_numero, id_cluster) values(110, 16);
+insert into casa(casa_numero, id_cluster) values(136, 2);
+insert into casa(casa_numero, id_cluster) values(12, 1);
+insert into casa(casa_numero, id_cluster) values(91, 2);
+insert into casa(casa_numero, id_cluster) values(65, 8);
+insert into casa(casa_numero, id_cluster) values(457, 17);
+insert into casa(casa_numero, id_cluster) values(456, 17);
+insert into casa(casa_numero, id_cluster) values(92, 14);
+
 create table bebida(
 	id int primary key auto_increment,
 	bebida varchar(20),
     precio double
 );
-
-
 
 create table ingreso(
 	id int primary key auto_increment,
@@ -96,7 +113,33 @@ create table ingreso(
     fecha date,
     foreign key(id_bebida) references bebida(id),
     foreign key(id_casa) references casa(id)
-);]]></console>
+);
+--id_casa, id_bebida, chocobanano_cant, chocolate_cant, bebida_cant, chocobananao
+insert into ingreso(id_casa, id_bebida,
+chocobanano_cant, chocolate_cant, bebida_cant,
+chocobanano_total, chocolate_total, bebida_total,
+total, fecha)
+values(2,1,5,0,0,2.5,0,0,2.5,'2025-06-20');
+
+
+
+ 
+ delete from ingreso;
+ select * from ingreso;
+ 
+ 
+ select c.casa_numero, cl.letra, cl.cluster  from casa c inner join cluster cl 
+ where c.id_cluster = cl.id
+group by c.casa_numero, cl.letra, cl.cluster;]]></console>
+      <console name="Ingreso de emergencia" type="STANDARD" schema="chocoloop" session="Pool"><![CDATA[select * from ingreso;
+select * from casa;
+
+
+insert into ingreso(id_casa, id_bebida, 
+chocobanano_cant, chocolate_cant, bebida_cant,
+chocobanano_total, chocolate_total, bebida_total,
+total, fecha)
+                values (?,?,?,?,?,?,?,?,?,?);]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -114,6 +157,9 @@ create table ingreso(
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
     <filters />
+  </component>
+  <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
+    <recently-used-interfaces />
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>

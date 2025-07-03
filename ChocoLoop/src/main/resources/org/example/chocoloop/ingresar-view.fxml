@@ -5,7 +5,7 @@
 
 <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #99a3a4;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.chocoloop.IngresarController">
     <children>
-        <Button layoutX="527.0" layoutY="361.0" mnemonicParsing="false" onAction="#guardar" text="GUARDAR" />
+        <Button fx:id="btnSave" disable="true" layoutX="527.0" layoutY="361.0" mnemonicParsing="false" onAction="#guardar" text="GUARDAR" />
         <Button layoutX="436.0" layoutY="361.0" mnemonicParsing="false" onAction="#volverMid" text="CANCELAR" />
         <Label layoutX="14.0" layoutY="14.0" text="NO. CASA" />
         <Spinner fx:id="SPCasa" layoutX="79.0" layoutY="10.0" max="600" min="0" prefHeight="25.0" prefWidth="71.0" />
@@ -29,5 +29,6 @@
                 <Label layoutX="470.0" layoutY="14.0" text="CANTIDAD" />
             </children>
         </Pane>
+      <Button layoutX="178.0" layoutY="361.0" mnemonicParsing="false" onAction="#reiniciarValores" text="NUEVO INGRESO" />
     </children>
 </Pane>

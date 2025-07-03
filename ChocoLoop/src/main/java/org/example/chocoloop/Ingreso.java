@@ -4,7 +4,9 @@ import org.example.chocoloop.DB.conexion;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.time.LocalDate;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ingreso {
     private int id_casa,
@@ -79,14 +81,12 @@ public class Ingreso {
     }
 
     //----------------------BASE DE DATOS--------------------//
-    protected void saveIngreso() throws Exception{
+    protected void saveIngreso() throws Exception {
         int id_casa = getId_casa(), id_bebida = getId_bebida(),
                 chocobananoCant = getChocobanano_cant(), chocolateCant = getChocolate_cant(), bebidaCant = getBebida_cant();
         double chocobananoTotal = getChocobanano_total(), chocolateTotal = getChocolate_total(), bebidaTotal = getBebida_total(),
                 total = getTotal();
         String fecha = getFecha();
-        System.out.println(id_casa +  id_bebida + chocobananoCant + chocolateCant + bebidaCant + chocobananoTotal +
-                chocolateTotal + bebidaTotal + total + fecha);
 
         Connection con = conexion.getConnection();
         String query =
@@ -94,7 +94,7 @@ public class Ingreso {
                         "chocobanano_cant, chocolate_cant, bebida_cant, " +
                         "chocobanano_total, chocolate_total, bebida_total, " +
                         "total, fecha) " +
-                "values (?,?,?,?,?,?,?,?,?,?)";
+                        "values (?,?,?,?,?,?,?,?,?,?)";
 
         PreparedStatement pstmt = con.prepareStatement(query);
         pstmt.setInt(1, id_casa);
@@ -103,11 +103,35 @@ public class Ingreso {
         pstmt.setInt(4, chocolateCant);
         pstmt.setInt(5, bebidaCant);
         pstmt.setDouble(6, chocobananoTotal);
-        pstmt.setDouble(7,chocolateTotal);
-        pstmt.setDouble(8,bebidaTotal);
+        pstmt.setDouble(7, chocolateTotal);
+        pstmt.setDouble(8, bebidaTotal);
         pstmt.setDouble(9, total);
         pstmt.setString(10, fecha);
 
         pstmt.executeUpdate();
+        con.close();
+    }
+
+    protected List<String> getIngreso() throws Exception {
+        List<String> ingreso = new ArrayList<>();
+        Connection con = conexion.getConnection();
+        String query = "select * from ingreso";
+        ResultSet rs = con.createStatement().executeQuery(query);
+        while(rs.next()){
+            String item = rs.getInt("id_casa") + "--" +
+            rs.getInt("id_bebida") + "--" +
+            rs.getInt("chocobanano_Cant") + "--" +
+            rs.getInt("chocolate_Cant") + "--" +
+            rs.getInt("bebida_Cant") + "--" +
+            rs.getDouble("chocobanano_Total") + "--" +
+            rs.getDouble("chocolate_Total") + "--" +
+            rs.getDouble("bebida_Total") + "--" +
+            rs.getDouble("total") + "--" +
+            rs.getString("fecha");
+
+            ingreso.add(item);
+        }
+        con.close();
+        return ingreso;
     }
 }

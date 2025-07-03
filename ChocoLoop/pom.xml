@@ -25,12 +25,16 @@
             <artifactId>javafx-fxml</artifactId>
             <version>21</version>
         </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>9.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -49,6 +53,12 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
+                    <compilerArgs>
+                        <arg>--release</arg>
+                        <arg>21</arg>
+                        <arg>--add-modules</arg>
+                        <arg>ALL-SYSTEM</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -60,7 +70,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.example.chocoloop/org.example.chocoloop.Application</mainClass>
+                            <mainClass>org.example.chocoloop.Application</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

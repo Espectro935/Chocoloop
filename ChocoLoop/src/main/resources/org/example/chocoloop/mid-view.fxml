@@ -3,13 +3,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.chocoloop.MidController">
+<Pane prefHeight="449.0" prefWidth="862.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.chocoloop.MidController">
     <children>
-        <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+        <TabPane prefHeight="449.0" prefWidth="862.0" tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab text="INGRESAR">
                     <content>
-                        <Pane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <Pane minHeight="0.0" minWidth="0.0" prefHeight="371.0" prefWidth="676.0">
                             <children>
                                 <Label layoutX="22.0" layoutY="50.0" text="INGRESAR VENTA:" />
                                 <Button layoutX="167.0" layoutY="50.0" mnemonicParsing="false" onAction="#abrirIngreso" text="INGRESAR" />
@@ -21,10 +21,32 @@
                     <content>
                         <Pane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <ListView fx:id="LVDatos" layoutX="14.0" layoutY="85.0" prefHeight="273.0" prefWidth="570.0" />
-                                <ChoiceBox fx:id="CBItem" layoutX="142.0" layoutY="33.0" prefWidth="150.0" />
-                                <Label layoutX="20.0" layoutY="37.0" text="OBJETO A BUSCAR: " />
-                                <Button layoutX="506.0" layoutY="33.0" mnemonicParsing="false" onAction="#showData" text="BUSCAR" />
+                                <ListView fx:id="LVDatos" layoutX="13.0" layoutY="65.0" prefHeight="341.0" prefWidth="675.0" />
+                                <ChoiceBox fx:id="CBItem" layoutX="129.0" layoutY="10.0" prefWidth="150.0" />
+                                <Label layoutX="14.0" layoutY="14.0" text="TABLA A BUSCAR:" />
+                                <Button layoutX="617.0" layoutY="10.0" mnemonicParsing="false" onAction="#showData" text="BUSCAR" />
+                            </children>
+                        </Pane>
+                    </content>
+                </Tab>
+                <Tab text="INGRESO">
+                    <content>
+                        <Pane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <TableView fx:id="TVIngreso" layoutX="14.0" layoutY="23.0" prefHeight="372.0" prefWidth="834.0">
+                                    <columns>
+                                        <TableColumn fx:id="colIdCasa" prefWidth="75.0" text="ID_Casa" />
+                                        <TableColumn fx:id="colIdBebida" prefWidth="75.0" text="ID_Bebida" />
+                                        <TableColumn fx:id="colChocobananoCant" prefWidth="75.0" text="Chocobanano_cant" />
+                                        <TableColumn fx:id="colChocolateCant" prefWidth="75.0" text="Chocolate_cant" />
+                                        <TableColumn fx:id="colBebidaCant" prefWidth="75.0" text="Bebida_cant" />
+                                        <TableColumn fx:id="colChocobananoTotal" prefWidth="75.0" text="Chocobanano_total" />
+                                        <TableColumn fx:id="colChocolateTotal" prefWidth="75.0" text="Chocolate_total" />
+                                        <TableColumn fx:id="colBebidaTotal" prefWidth="75.0" text="Bebida_total" />
+                                        <TableColumn fx:id="colTotal" prefWidth="75.0" text="Total" />
+                                        <TableColumn fx:id="colFecha" prefWidth="75.0" text="Fecha" />
+                                    </columns>
+                                </TableView>
                             </children>
                         </Pane>
                     </content>

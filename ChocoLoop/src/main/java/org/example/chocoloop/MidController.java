@@ -1,13 +1,14 @@
 package org.example.chocoloop;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.example.chocoloop.DB.conexion;
 
@@ -27,14 +28,58 @@ public class MidController implements Initializable {
     //-------------------LIST VIEW-------------------------//
     @FXML
     private ListView<String> LVDatos;
+    //------------------TABLE VIEW-------------------------//
+    @FXML
+    private TableView<Ingreso> TVIngreso;
+    @FXML
+    private TableColumn<Ingreso, String> colIdCasa, colIdBebida,
+            colChocobananoCant, colChocolateCant, colBebidaCant,
+            colChocobananoTotal, colChocolateTotal, colBebidaTotal, colTotal,
+            colFecha;
     //-----------------DECLARACIONES------------------------//
     String[] items = {"ingreso", "Casa", "bebida", "Usuario"};
     Alert alertError = new Alert(Alert.AlertType.ERROR);
-    Alert alertInfo = new Alert(Alert.AlertType.INFORMATION);
+    Ingreso ingreso = new Ingreso();
+    //Alert alertInfo = new Alert(Alert.AlertType.INFORMATION);
 
     //-----------------FUNCIONES----------------------------//
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+        try {
+            colIdCasa.setCellValueFactory(new PropertyValueFactory<>("id_casa"));
+            colIdBebida.setCellValueFactory(new PropertyValueFactory<>("id_bebida"));
+            colChocobananoCant.setCellValueFactory(new PropertyValueFactory<>("chocobanano_cant"));
+            colChocolateCant.setCellValueFactory(new PropertyValueFactory<>("chocolate_cant"));
+            colBebidaCant.setCellValueFactory(new PropertyValueFactory<>("bebida_cant"));
+            colChocobananoTotal.setCellValueFactory(new PropertyValueFactory<>("chocobanano_total"));
+            colChocolateTotal.setCellValueFactory(new PropertyValueFactory<>("chocolate_total"));
+            colBebidaTotal.setCellValueFactory(new PropertyValueFactory<>("bebida_total"));
+            colTotal.setCellValueFactory(new PropertyValueFactory<>("Total"));
+            colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+
+            ObservableList<Ingreso> listaIngreso = FXCollections.observableArrayList();
+
+            for (String item : ingreso.getIngreso()) {
+                String[] parts = item.split("--");
+                int idCasa = Integer.parseInt(parts[0]);
+                int idBebida = Integer.parseInt(parts[1]);
+                int chocobananoCant = (int) Double.parseDouble(parts[2]);
+                int chocolateCant = (int) Double.parseDouble(parts[3]);
+                int bebidaCant = (int) Double.parseDouble(parts[4]);
+                double chocobananoTotal = Double.parseDouble(parts[5]);
+                double chocolateTotal = Double.parseDouble(parts[6]);
+                double bebidaTotal = Double.parseDouble(parts[7]);
+                double total = Double.parseDouble(parts[8]);
+                String fecha = parts[9];
+
+                listaIngreso.add(new Ingreso(idCasa, idBebida, chocobananoCant, chocolateCant,
+                        bebidaCant, chocobananoTotal, chocolateTotal, bebidaTotal, total, fecha));
+            }
+
+            TVIngreso.setItems(listaIngreso);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         CBItem.getItems().addAll(items);
     }
 
